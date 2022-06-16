@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace AnkiWeb.Client;
-public class AnkiClient
+public class AnkiClient : IAnkiClient
 {
     private readonly HttpClient _httpClient;
     private readonly LoginCredentials _loginCredentials;
