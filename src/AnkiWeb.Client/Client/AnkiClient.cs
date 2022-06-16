@@ -58,7 +58,8 @@ public class AnkiClient : IAnkiClient
                 // Logs in, which genertes a cookie that's stored in the httpClient. 
                 using (var loginResponse = await _httpClient.PostAsync("https://ankiweb.net/account/login", requestHeaders))
                 {
-                    if (loginResponse.StatusCode == System.Net.HttpStatusCode.Redirect)
+                    string responsePath = loginResponse.RequestMessage.RequestUri.AbsolutePath;
+                    if (responsePath == "/decks/")
                     {
                         // Cookie exists.
                         ankiWebConfig.AnkiCookieExists = true;
@@ -184,6 +185,7 @@ public class AnkiClient : IAnkiClient
 
             var requestHeaders = new FormUrlEncodedContent(headerValues);
 
+            // TODO verifying the card was actually added.
             using (var response = await _httpClient.PostAsync("https://ankiuser.net/edit/save", requestHeaders))
             {
                 response.EnsureSuccessStatusCode();
