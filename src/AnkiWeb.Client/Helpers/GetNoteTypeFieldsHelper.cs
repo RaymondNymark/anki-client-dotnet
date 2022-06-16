@@ -2,7 +2,7 @@
 
 namespace AnkiWeb.Client.Helpers;
 
-public class Field
+public class NoteTypeField
 {
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -11,5 +11,5 @@ public class Field
 public class NoteTypeFields
 {
     [JsonPropertyName("fields")]
-    public List<Field> Fields { get; set; } = new();
+    public List<NoteTypeField> Fields { get; set; } = new();
 }
