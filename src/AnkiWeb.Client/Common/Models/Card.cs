@@ -13,6 +13,7 @@ public record Card
         Tags = tags;
     }
 
+    // Todo: Use string builder.
     private string EncodeDataToCorrectFormat()
     {
         List<string> fieldData = Fields.Select(x => $@"""{x.Value}""").ToList();
