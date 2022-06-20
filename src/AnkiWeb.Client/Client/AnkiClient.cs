@@ -3,6 +3,7 @@ using AnkiWeb.Client.Common.Results;
 using AnkiWeb.Client.Helpers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+// TODO change project properties.
 
 namespace AnkiWeb.Client;
 public class AnkiClient : IAnkiClient
@@ -19,7 +20,7 @@ public class AnkiClient : IAnkiClient
         _ankiWebConfig = new();
     }
 
-    // Finds 1st csrf token, finds 2nd csrf token, also calls a specific website for cookies, and tries to log in.
+    // Finds the first crsf token in ankiweb.net, logs in fetching the cookie and attempts to find the second crsf token in ankiuser.net
     private async Task<Result> ConfigureCookiesAndAuthorization()
     {
         if (_ankiWebConfig.IsConfigured)
@@ -185,11 +186,18 @@ public class AnkiClient : IAnkiClient
 
             var requestHeaders = new FormUrlEncodedContent(headerValues);
 
-            // TODO verifying the card was actually added.
-            using (var response = await _httpClient.PostAsync("https://ankiuser.net/edit/save", requestHeaders))
+            // From AnkiWeb source code, this only fails if provided fields are incorrect, and that's accounted for. 
+            try
             {
-                response.EnsureSuccessStatusCode();
-                return new SuccessResult();
+                using (var response = await _httpClient.PostAsync("https://ankiuser.net/edit/save", requestHeaders))
+                {
+                    response.EnsureSuccessStatusCode();
+                    return new SuccessResult();
+                }
+            }
+            catch (HttpRequestException)
+            {
+                return new ErrorResult("There was an unknown error adding new card to the deck. Please try again at a later time.");
             }
         }
         else
