@@ -1,15 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>Library for .NET to programatically interact with anki</Description>
+    <Version>$(VersionPrefix)</Version>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<Authors>Raymond Nymark</Authors>
+		<PackageProjectUrl>https://github.com/RaymondNymark/anki-client-dotnet</PackageProjectUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<RepositoryUrl>https://github.com/RaymondNymark/anki-client-dotnet</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Anki</PackageTags>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>AnkiWeb.Client.Tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Update="icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 	
 </Project>
