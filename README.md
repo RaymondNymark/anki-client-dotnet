@@ -1,3 +1,4 @@
+![AnkiWeb.Client](assets/AnkiConnect.png)
 # anki-client-dotnet
  Library for .NET to programatically do things with anki!
 
