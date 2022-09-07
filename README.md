@@ -1,6 +1,7 @@
 ![AnkiWeb.Client](assets/AnkiConnect.png)
 # anki-client-dotnet
  Library for .NET to programatically do things with anki!
+[Nuget Package!](https://www.nuget.org/packages/AnkiWeb.Client/)
 
 ## Supported features
  - Adding new cards to deck (including styling!)
