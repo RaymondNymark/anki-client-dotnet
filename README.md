@@ -69,4 +69,4 @@ Example of valid stylized text:
 Easiest way to figure out valid stylized text is to open the card adding interface in Anki desktop application, and toggling the HTML Editor.  This will show valid stylized text, as long as " is replaced with an '. 
 
 Anki HTML Editor 
-![Anki HTML Editor](AnkiHtmlEditor.jpg)
+![Anki HTML Editor](assets/AnkiHtmlEditor.jpg)
