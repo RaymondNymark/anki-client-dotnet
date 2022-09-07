@@ -143,6 +143,10 @@ public class AnkiClient : IAnkiClient
         }
     }
 
+    /// <summary>
+    /// Looks up your anki collection's decks .
+    /// </summary>
+    /// <returns>CollectionInfo and AnkiClientStatus</returns>
     public async Task<(CollectionInfo collectionInfo, AnkiClientStatus status)> GetCollectionInfoAsync()
     {
         Result result = await EnsureClientIsConfiguredAsync();
@@ -239,6 +243,9 @@ public class AnkiClient : IAnkiClient
         }
     }
 
+    /// <summary>
+    /// Adds new card to a specified deck.
+    /// </summary>
     public async Task<AnkiClientStatus> AddNewCardToDeckAsync(Card card, string deckId)
     {
         var result = await AddNewCardToDeck(card, deckId);
