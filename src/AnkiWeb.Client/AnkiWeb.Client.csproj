@@ -15,6 +15,8 @@
 		<RepositoryUrl>https://github.com/RaymondNymark/anki-client-dotnet</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Anki</PackageTags>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>AnkiWeb.Client</PackageId>
 	</PropertyGroup>
 	
 	<ItemGroup>
