@@ -1,9 +1,9 @@
 ﻿using AnkiWeb.Client.Common.Models;
 using AnkiWeb.Client.Common.Results;
 using AnkiWeb.Client.Helpers;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-// TODO change project properties.
 
 namespace AnkiWeb.Client;
 public class AnkiClient : IAnkiClient
@@ -35,40 +35,26 @@ public class AnkiClient : IAnkiClient
 
             using (var ankiWebResponse = await _httpClient.SendAsync(ankiWebRequest))
             {
-                // Tries to find AnkiWebCsrfToken in the Html content.
-                var htmlContent = await ankiWebResponse.Content.ReadAsStringAsync();
-                var ankiWebCsrfToken = CsrfHelper.FindAnkiWebCsrfTokenInHtml(htmlContent);
-
-                if (string.IsNullOrEmpty(ankiWebCsrfToken))
-                {
-                    return new CsrfErrorResult("Csrf token on ankiWeb was not found.");
-                }
-                ankiWebConfig.AnkiWebCsrfToken = ankiWebCsrfToken;
-
-                // Required header values to make authorized get calls.
-                Dictionary<string, string> headerValues = new()
-                {
-                    { "submitted", "1" },
-                    { "csrf_token", ankiWebConfig.AnkiWebCsrfToken },
-                    { "username", _loginCredentials.Username },
-                    { "password", _loginCredentials.Password }
-                };
-
-                var requestHeaders = new FormUrlEncodedContent(headerValues);
+                // Oddly formated StringContent is required for valid calls.
+                StringContent queryString = new(
+                    content: $"\n\u0014{_loginCredentials.Username}\u0012\u0014{_loginCredentials.Password}",
+                    encoding: Encoding.UTF8,
+                    mediaType: "application/octet-stream");
 
                 // Logs in, which genertes a cookie that's stored in the httpClient. 
-                using (var loginResponse = await _httpClient.PostAsync("https://ankiweb.net/account/login", requestHeaders))
+                using (var loginResponse = await _httpClient.PostAsync("https://ankiweb.net/account/login", queryString))
                 {
-                    string responsePath = loginResponse.RequestMessage.RequestUri.AbsolutePath;
-                    if (responsePath == "/decks/")
+                    // Validate if ankiweb call was success and if cookie was stored.
+                    if (loginResponse.IsSuccessStatusCode is false)
                     {
-                        // Cookie exists.
-                        ankiWebConfig.AnkiCookieExists = true;
+                        return new LoginErrorResult($"Failed logging onto ankiweb.net. Reason: {loginResponse.ReasonPhrase} (IsSuccessStatusCode is false)");
                     }
-                    else
+
+                    if (loginResponse.Headers.Contains("Set-Cookie") is false)
                     {
-                        return new LoginErrorResult("Failed logging onto ankiweb.net. Check login details.");
+                        return new LoginErrorResult($"Failed logging onto ankiweb.net. Reason: {loginResponse.ReasonPhrase} (Response header is missing Set-Cookie)");
                     }
+                    ankiWebConfig.AnkiCookieExists = true;
                 }
             }
 
