@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/AnkiWeb.Console/AnkiWeb.Console.csproj
